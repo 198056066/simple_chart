@@ -1,0 +1,43 @@
+{
+  "title": "月度销售报告",
+  "subtitle": "2024年第一季度表现",
+  "unit": "元",
+  "data": [
+    {
+      "label": "一月",
+      "value": 45000,
+      "color": "#FF6B6B",
+      "tooltip": "一月销售: 45,000元"
+    },
+    {
+      "label": "二月", 
+      "value": 52000,
+      "color": "#4ECDC4",
+      "tooltip": "二月销售: 52,000元"
+    },
+    {
+      "label": "三月",
+      "value": 48000,
+      "color": "#45B7D1",
+      "tooltip": "三月销售: 48,000元"
+    },
+    {
+      "label": "四月",
+      "value": 61000,
+      "color": "#96CEB4",
+      "tooltip": "四月销售: 61,000元"
+    },
+    {
+      "label": "五月",
+      "value": 55000,
+      "color": "#FFEAA7",
+      "tooltip": "五月销售: 55,000元"
+    },
+    {
+      "label": "六月",
+      "value": 67000,
+      "color": "#DDA0DD",
+      "tooltip": "六月销售: 67,000元"
+    }
+  ]
+}
