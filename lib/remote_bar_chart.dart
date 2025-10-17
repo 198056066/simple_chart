@@ -27,5 +27,5 @@
 export 'models/chart_data.dart';
 export 'models/chart_style.dart';
 export 'services/data_service.dart';
-export 'widgets/simple_chart.dart';
+export 'widgets/remote_bar_chart.dart';
 export 'widgets/bar_chart_widget.dart';
