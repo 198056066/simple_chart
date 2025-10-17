@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'remote_bar_chart.dart';
+import 'package:simple_chart/remote_bar_chart.dart';
 
 void main() {
   runApp(const MyApp());

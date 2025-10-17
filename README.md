@@ -29,7 +29,7 @@ dependencies:
 
 ```dart
 import 'package:flutter/material.dart';
-import 'remote_bar_chart.dart';
+import 'simple_chart.dart';
 
 class MyChartPage extends StatelessWidget {
   @override
@@ -54,7 +54,7 @@ class MyChartPage extends StatelessWidget {
 
 ```dart
 import 'package:flutter/material.dart';
-import 'remote_bar_chart.dart';
+import 'simple_chart.dart';
 
 class LocalChartPage extends StatelessWidget {
   @override
