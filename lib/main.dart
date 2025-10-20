@@ -177,7 +177,8 @@ class _ChartDemoPageState extends State<ChartDemoPage> {
       gridColor: Color(0xFF333333),
       gridWidth: 1,
       showGrid: true,
-      gridCount: 6,
+      gridCountX: 6,
+      gridCountY: 8,
     );
   }
 

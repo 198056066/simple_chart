@@ -189,7 +189,8 @@ class _BarChartWidgetState extends State<BarChartWidget> with TickerProviderStat
           painter: GridLinesPainter(
             color: axisStyle.gridColor,
             strokeWidth: axisStyle.gridWidth,
-            gridCount: axisStyle.gridCount,
+            gridCountX: axisStyle.gridCountX,
+            gridCountY: axisStyle.gridCountY,
           ),
         ),
       ),
@@ -206,8 +207,8 @@ class _BarChartWidgetState extends State<BarChartWidget> with TickerProviderStat
         height: chartHeight,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: List.generate(axisStyle.gridCount + 1, (index) {
-            final value = maxValue - (valueRange * index / axisStyle.gridCount);
+          children: List.generate(axisStyle.gridCountX + 1, (index) {
+            final value = maxValue - (valueRange * index / axisStyle.gridCountX);
             return Text(
               _formatValue(value, widget.data.unit),
               style: TextStyle(
@@ -320,12 +321,14 @@ class _BarChartWidgetState extends State<BarChartWidget> with TickerProviderStat
 class GridLinesPainter extends CustomPainter {
   final Color color;
   final double strokeWidth;
-  final int gridCount;
+  final int gridCountX;
+  final int gridCountY;
 
   GridLinesPainter({
     required this.color,
     required this.strokeWidth,
-    required this.gridCount,
+    required this.gridCountX,
+    required this.gridCountY,
   });
 
   @override
@@ -336,11 +339,21 @@ class GridLinesPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     // 绘制水平网格线
-    for (int i = 0; i <= gridCount; i++) {
-      final y = size.height * i / gridCount;
+    for (int i = 0; i <= gridCountX; i++) {
+      final y = size.height * i / gridCountX;
       canvas.drawLine(
         Offset(0, y),
         Offset(size.width, y),
+        paint,
+      );
+    }
+
+    // 绘制竖直网格线
+    for (int i = 0; i <= gridCountY; i++) {
+      final x = size.width * i / gridCountY;
+      canvas.drawLine(
+        Offset(x, 0),
+        Offset(x, size.height),
         paint,
       );
     }
