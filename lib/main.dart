@@ -141,6 +141,7 @@ class _ChartDemoPageState extends State<ChartDemoPage> {
       barStyle: example.customStyle ? _getCustomBarStyle() : null,
       axisStyle: example.customStyle ? _getCustomAxisStyle() : null,
       titleStyle: example.customStyle ? _getCustomTitleStyle() : null,
+      remarksStyle: example.customStyle ? _getCustomRemarksStyle() : _getDefaultRemarksStyle(),
     );
   }
 
@@ -189,6 +190,30 @@ class _ChartDemoPageState extends State<ChartDemoPage> {
       fontWeight: FontWeight.bold,
       alignment: TextAlign.center,
       padding: EdgeInsets.only(bottom: 24),
+    );
+  }
+
+  RemarksStyle _getCustomRemarksStyle() {
+    return const RemarksStyle(
+      backgroundColor: Color(0xFF00BCD4),
+      textColor: Colors.black,
+      fontSize: 11,
+      fontWeight: FontWeight.w500,
+      borderRadius: 6,
+      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+      showRemarks: true,
+    );
+  }
+
+  RemarksStyle _getDefaultRemarksStyle() {
+    return const RemarksStyle(
+      backgroundColor: Color(0xFF2196F3),
+      textColor: Colors.black,
+      fontSize: 10,
+      fontWeight: FontWeight.normal,
+      borderRadius: 4,
+      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+      showRemarks: true,
     );
   }
 }

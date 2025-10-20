@@ -26,11 +26,11 @@ class DataService {
       unit: '元',
       data: [
         const ChartDataPoint(label: '一月', value: 12000, color: '#FF6B6B', remarks: ['#FF6B6B', 'qweq', 'wqrregr', 'rewrwe']),
+        const ChartDataPoint(label: '六月', value: 25000, color: '#DDA0DD', remarks: ['#FF6B6B', 'qweq', 'wqrregr', 'rewrwe']),
         const ChartDataPoint(label: '二月', value: 15000, color: '#4ECDC4', remarks: ['wqrregr', 'rewrwe']),
         const ChartDataPoint(label: '三月', value: 18000, color: '#45B7D1', remarks: ['#FF6B6B']),
         const ChartDataPoint(label: '四月', value: 22000, color: '#96CEB4', remarks: ['wqrregr']),
         const ChartDataPoint(label: '五月', value: 19000, color: '#FFEAA7', remarks: ['#FF6B6B', 'qweq', 'wqrregr', 'rewrwe']),
-        const ChartDataPoint(label: '六月', value: 25000, color: '#DDA0DD', remarks: ['#FF6B6B', 'qweq', 'wqrregr', 'rewrwe']),
       ],
     );
   }
