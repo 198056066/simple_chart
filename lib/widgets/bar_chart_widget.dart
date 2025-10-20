@@ -215,7 +215,7 @@ class _BarChartWidgetState extends State<BarChartWidget> with TickerProviderStat
                 fontSize: axisStyle.labelFontSize,
                 fontWeight: axisStyle.labelFontWeight,
               ),
-              textAlign: TextAlign.right,
+              textAlign: TextAlign.center,
             );
           }),
         ),

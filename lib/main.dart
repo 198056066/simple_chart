@@ -30,7 +30,7 @@ class ChartDemoPage extends StatefulWidget {
 
 class _ChartDemoPageState extends State<ChartDemoPage> {
   int _selectedExample = 0;
-  
+
   final List<ChartExample> _examples = [
     ChartExample(
       title: '示例数据',
@@ -62,7 +62,7 @@ class _ChartDemoPageState extends State<ChartDemoPage> {
               itemBuilder: (context, index) {
                 final example = _examples[index];
                 final isSelected = _selectedExample == index;
-                
+
                 return GestureDetector(
                   onTap: () {
                     setState(() {
@@ -74,18 +74,14 @@ class _ChartDemoPageState extends State<ChartDemoPage> {
                     margin: const EdgeInsets.only(right: 12),
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: isSelected 
-                          ? Theme.of(context).primaryColor
-                          : Colors.grey[200],
+                      color: isSelected ? Theme.of(context).primaryColor : Colors.grey[200],
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: isSelected 
-                            ? Theme.of(context).primaryColor
-                            : Colors.grey[300]!,
+                        color: isSelected ? Theme.of(context).primaryColor : Colors.grey[300]!,
                         width: 2,
                       ),
                     ),
-        child: Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
@@ -100,9 +96,7 @@ class _ChartDemoPageState extends State<ChartDemoPage> {
                           example.description,
                           style: TextStyle(
                             fontSize: 12,
-                            color: isSelected 
-                                ? Colors.white70 
-                                : Colors.black54,
+                            color: isSelected ? Colors.white70 : Colors.black54,
                           ),
                         ),
                         const Spacer(),
@@ -115,15 +109,15 @@ class _ChartDemoPageState extends State<ChartDemoPage> {
                             ),
                             const SizedBox(width: 4),
                           ],
-            ),
-          ],
-        ),
-      ),
+                        ),
+                      ],
+                    ),
+                  ),
                 );
               },
             ),
           ),
-          
+
           // 图表显示
           Expanded(
             child: Padding(
@@ -139,15 +133,15 @@ class _ChartDemoPageState extends State<ChartDemoPage> {
   Widget _buildSelectedChart() {
     final example = _examples[_selectedExample];
 
-      // 对于本地数据，我们使用示例数据
-      final sampleData = DataService.createSampleData();
-      return BarChartWidget(
-        data: sampleData,
-        chartStyle: example.customStyle ? _getCustomChartStyle() : null,
-        barStyle: example.customStyle ? _getCustomBarStyle() : null,
-        axisStyle: example.customStyle ? _getCustomAxisStyle() : null,
-        titleStyle: example.customStyle ? _getCustomTitleStyle() : null,
-      );
+    // 对于本地数据，我们使用示例数据
+    final sampleData = DataService.createSampleData();
+    return BarChartWidget(
+      data: sampleData,
+      chartStyle: example.customStyle ? _getCustomChartStyle() : null,
+      barStyle: example.customStyle ? _getCustomBarStyle() : null,
+      axisStyle: example.customStyle ? _getCustomAxisStyle() : null,
+      titleStyle: example.customStyle ? _getCustomTitleStyle() : null,
+    );
   }
 
   ChartStyle _getCustomChartStyle() {
