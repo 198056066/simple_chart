@@ -23,6 +23,9 @@ class BarChartWidget extends StatefulWidget {
   /// 提示框的样式配置
   final TooltipStyle? tooltipStyle;
 
+  /// 柱子备注的样式配置
+  final RemarksStyle? remarksStyle;
+
   const BarChartWidget({
     super.key,
     required this.data,
@@ -31,6 +34,7 @@ class BarChartWidget extends StatefulWidget {
     this.axisStyle,
     this.titleStyle,
     this.tooltipStyle,
+    this.remarksStyle,
   });
 
   @override
@@ -72,6 +76,7 @@ class _BarChartWidgetState extends State<BarChartWidget> with TickerProviderStat
     final axisStyle = widget.axisStyle ?? const AxisStyle();
     final titleStyle = widget.titleStyle ?? const TitleStyle();
     final tooltipStyle = widget.tooltipStyle ?? const TooltipStyle();
+    final remarksStyle = widget.remarksStyle ?? const RemarksStyle();
 
     return Padding(
       padding: chartStyle.padding,
@@ -80,7 +85,7 @@ class _BarChartWidgetState extends State<BarChartWidget> with TickerProviderStat
         children: [
           _buildTitle(titleStyle),
           Expanded(
-            child: _buildChart(barStyle, axisStyle, tooltipStyle),
+            child: _buildChart(barStyle, axisStyle, tooltipStyle, remarksStyle),
           ),
         ],
       ),
@@ -118,7 +123,7 @@ class _BarChartWidgetState extends State<BarChartWidget> with TickerProviderStat
     );
   }
 
-  Widget _buildChart(BarStyle barStyle, AxisStyle axisStyle, TooltipStyle tooltipStyle) {
+  Widget _buildChart(BarStyle barStyle, AxisStyle axisStyle, TooltipStyle tooltipStyle, RemarksStyle remarksStyle) {
     final maxValue = widget.data.data.map((e) => e.value).reduce(math.max);
     final minValue = widget.data.data.map((e) => e.value).reduce(math.min);
     final valueRange = maxValue - minValue;
@@ -162,7 +167,9 @@ class _BarChartWidgetState extends State<BarChartWidget> with TickerProviderStat
                         barHeight,
                         barStyle,
                         tooltipStyle,
+                        remarksStyle,
                         maxValue,
+                        chartHeight,
                       ),
                     );
                   }).toList(),
@@ -276,8 +283,17 @@ class _BarChartWidgetState extends State<BarChartWidget> with TickerProviderStat
     );
   }
 
-  Widget _buildBar(ChartDataPoint dataPoint, double barHeight, BarStyle barStyle, TooltipStyle tooltipStyle, double maxValue) {
+  Widget _buildBar(ChartDataPoint dataPoint, double barHeight, BarStyle barStyle, TooltipStyle tooltipStyle,
+      RemarksStyle remarksStyle, double maxValue, double chartHeight) {
+    GlobalKey key = GlobalKey();
+    double remarksHeight = 0.0;
     final color = dataPoint.color != null ? Color(int.parse(dataPoint.color!.replaceFirst('#', '0xFF'))) : barStyle.color;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final renderBox = key.currentContext?.findRenderObject() as RenderBox?;
+      if (renderBox != null) {
+        remarksHeight = renderBox.size.height;
+      }
+    });
 
     return AnimatedBuilder(
       animation: _animation,
@@ -290,22 +306,58 @@ class _BarChartWidgetState extends State<BarChartWidget> with TickerProviderStat
               _showTooltip(context, dataPoint, tooltipStyle);
             }
           },
-          child: Container(
-            height: animatedHeight,
-            decoration: BoxDecoration(
-              color: color,
-              border: barStyle.borderWidth > 0
-                  ? Border.all(
-                      color: barStyle.borderColor,
-                      width: barStyle.borderWidth,
-                    )
-                  : null,
-              borderRadius:
-                  barStyle.borderRadius != null ? BorderRadius.circular(barStyle.borderRadius!) : barStyle.borderRadiusStyle,
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              if (remarksHeight <= chartHeight - animatedHeight)
+                Container(
+                    alignment: Alignment.bottomCenter,
+                    height: chartHeight - animatedHeight,
+                    child: _buildRemarks(dataPoint, remarksStyle, key: key)),
+              Expanded(
+                child: Row(
+                  children: [
+                    Container(
+                      height: animatedHeight,
+                      decoration: BoxDecoration(
+                        color: color,
+                        border: barStyle.borderWidth > 0
+                            ? Border.all(
+                                color: barStyle.borderColor,
+                                width: barStyle.borderWidth,
+                              )
+                            : null,
+                        borderRadius: barStyle.borderRadius != null
+                            ? BorderRadius.circular(barStyle.borderRadius!)
+                            : barStyle.borderRadiusStyle,
+                      ),
+                    ),
+                    if (remarksHeight > chartHeight - animatedHeight)
+                      Container(
+                          alignment: Alignment.center,
+                          child: _buildRemarks(dataPoint, remarksStyle)),
+                  ],
+                ),
+              ),
+            ],
           ),
         );
       },
+    );
+  }
+
+  Widget _buildRemarks(ChartDataPoint dataPoint, RemarksStyle remarksStyle, {GlobalKey? key}) {
+    return Container(
+      key: key,
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+      child: Text(
+        dataPoint.remarks!.map((e) => e.toString()).toString(),
+        style: TextStyle(
+          color: remarksStyle.textColor,
+          fontSize: remarksStyle.fontSize,
+          fontWeight: remarksStyle.fontWeight,
+        ),
+      ),
     );
   }
 

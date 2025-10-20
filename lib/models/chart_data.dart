@@ -12,11 +12,15 @@ class ChartDataPoint {
   /// 此柱子的可选提示文本
   final String? tooltip;
 
+  /// 此柱子末端备注
+  final List<dynamic>? remarks;
+
   const ChartDataPoint({
     required this.label,
     required this.value,
     this.color,
     this.tooltip,
+    this.remarks,
   });
 
   factory ChartDataPoint.fromJson(Map<String, dynamic> json) {
@@ -25,6 +29,7 @@ class ChartDataPoint {
       value: (json['value'] as num).toDouble(),
       color: json['color'] as String?,
       tooltip: json['tooltip'] as String?,
+      remarks: (json['remarks'] as List<String>?)?.map((e) => e.toString()).toList(),
     );
   }
 
@@ -34,6 +39,7 @@ class ChartDataPoint {
       'value': value,
       if (color != null) 'color': color,
       if (tooltip != null) 'tooltip': tooltip,
+      if (remarks != null && remarks!.isNotEmpty) 'remarks': remarks,
     };
   }
 }

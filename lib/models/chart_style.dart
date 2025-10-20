@@ -177,3 +177,37 @@ class TooltipStyle {
     this.showTooltip = true,
   });
 }
+
+/// 柱子备注的样式配置
+class RemarksStyle {
+  /// 柱子备注的背景颜色
+  final Color backgroundColor;
+
+  /// 柱子备注的文本颜色
+  final Color textColor;
+
+  /// 柱子备注文本的字体大小
+  final double fontSize;
+
+  /// 柱子备注文本的字体粗细
+  final FontWeight fontWeight;
+
+  /// 柱子备注的边框圆角
+  final double borderRadius;
+
+  /// 柱子备注内部的填充
+  final EdgeInsets padding;
+
+  /// 是否显示柱子备注
+  final bool showRemarks;
+
+  const RemarksStyle({
+    this.backgroundColor = Colors.black87,
+    this.textColor = Colors.black,
+    this.fontSize = 12.0,
+    this.fontWeight = FontWeight.normal,
+    this.borderRadius = 4.0,
+    this.padding = const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+    this.showRemarks = true,
+  });
+}
