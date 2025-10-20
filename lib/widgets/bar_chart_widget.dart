@@ -186,8 +186,8 @@ class _BarChartWidgetState extends State<BarChartWidget> with TickerProviderStat
       left: padding,
       bottom: padding,
       child: SizedBox(
-        width: chartWidth + 20,
-        height: chartHeight + 20,
+        width: chartWidth + axisStyle.overWidth,
+        height: chartHeight + axisStyle.overWidth,
         child: CustomPaint(
           painter: AxisLinesPainter(
             color: axisStyle.color,

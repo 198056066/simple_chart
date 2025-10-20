@@ -73,6 +73,9 @@ class AxisStyle {
   /// 坐标轴线条的颜色
   final Color color;
 
+  /// 坐标轴线条的溢出区域
+  final double overWidth;
+
   /// 坐标轴线条的宽度
   final double width;
 
@@ -94,7 +97,7 @@ class AxisStyle {
   /// 是否显示网格线
   final bool showGrid;
 
-  /// 是否显示轴线
+  /// 是否显示坐标轴
   final bool showAxis;
 
   /// 要显示的x轴网格线数量
@@ -105,6 +108,7 @@ class AxisStyle {
 
   const AxisStyle({
     this.color = Colors.black54,
+    this.overWidth = 20.0,
     this.width = 1.0,
     this.labelColor = Colors.black87,
     this.labelFontSize = 12.0,
