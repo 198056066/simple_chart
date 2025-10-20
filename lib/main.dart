@@ -162,7 +162,7 @@ class _ChartDemoPageState extends State<ChartDemoPage> {
   }
 
   BarStyle _getCustomBarStyle() {
-    return const BarStyle(
+    return BarStyle(
       color: Color(0xFF00BCD4),
       borderWidth: 1,
       borderColor: Color(0xFF00ACC1),

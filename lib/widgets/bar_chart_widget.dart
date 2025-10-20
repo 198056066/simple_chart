@@ -7,19 +7,19 @@ import '../models/chart_style.dart';
 class BarChartWidget extends StatefulWidget {
   /// 要在图表中显示的数据
   final ChartData data;
-  
+
   /// 图表的样式配置
   final ChartStyle? chartStyle;
-  
+
   /// 柱子的样式配置
   final BarStyle? barStyle;
-  
+
   /// 坐标轴的样式配置
   final AxisStyle? axisStyle;
-  
+
   /// 标题的样式配置
   final TitleStyle? titleStyle;
-  
+
   /// 提示框的样式配置
   final TooltipStyle? tooltipStyle;
 
@@ -37,8 +37,7 @@ class BarChartWidget extends StatefulWidget {
   State<BarChartWidget> createState() => _BarChartWidgetState();
 }
 
-class _BarChartWidgetState extends State<BarChartWidget>
-    with TickerProviderStateMixin {
+class _BarChartWidgetState extends State<BarChartWidget> with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
   String? _hoveredBar;
@@ -69,33 +68,21 @@ class _BarChartWidgetState extends State<BarChartWidget>
   @override
   Widget build(BuildContext context) {
     final chartStyle = widget.chartStyle ?? const ChartStyle();
-    final barStyle = widget.barStyle ?? const BarStyle();
+    final barStyle = widget.barStyle ?? BarStyle();
     final axisStyle = widget.axisStyle ?? const AxisStyle();
     final titleStyle = widget.titleStyle ?? const TitleStyle();
     final tooltipStyle = widget.tooltipStyle ?? const TooltipStyle();
 
-    return Container(
-      margin: chartStyle.margin,
-      decoration: BoxDecoration(
-        color: chartStyle.backgroundColor,
-        border: Border.all(
-          color: chartStyle.borderColor,
-          width: chartStyle.borderWidth,
-        ),
-        borderRadius: BorderRadius.circular(chartStyle.borderRadius),
-      ),
-      child: Padding(
-        padding: chartStyle.padding,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildTitle(titleStyle),
-            const SizedBox(height: 16),
-            Expanded(
-              child: _buildChart(barStyle, axisStyle, tooltipStyle),
-            ),
-          ],
-        ),
+    return Padding(
+      padding: chartStyle.padding,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _buildTitle(titleStyle),
+          Expanded(
+            child: _buildChart(barStyle, axisStyle, tooltipStyle),
+          ),
+        ],
       ),
     );
   }
@@ -135,7 +122,7 @@ class _BarChartWidgetState extends State<BarChartWidget>
     final maxValue = widget.data.data.map((e) => e.value).reduce(math.max);
     final minValue = widget.data.data.map((e) => e.value).reduce(math.min);
     final valueRange = maxValue - minValue;
-    final padding = 20.0;
+    const padding = 20.0;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -147,10 +134,10 @@ class _BarChartWidgetState extends State<BarChartWidget>
           children: [
             // 网格线
             if (axisStyle.showGrid) _buildGridLines(axisStyle, chartWidth, chartHeight, padding),
-            
+
             // Y轴标签
             _buildYAxisLabels(axisStyle, maxValue, minValue, valueRange, chartHeight, padding),
-            
+
             // 柱子
             Positioned(
               left: padding,
@@ -163,10 +150,8 @@ class _BarChartWidgetState extends State<BarChartWidget>
                   children: widget.data.data.asMap().entries.map((entry) {
                     final index = entry.key;
                     final dataPoint = entry.value;
-                    final barHeight = valueRange > 0 
-                        ? (dataPoint.value - minValue) / valueRange * chartHeight
-                        : 0.0;
-                    
+                    final barHeight = valueRange > 0 ? (dataPoint.value - minValue) / valueRange * chartHeight : 0.0;
+
                     return Container(
                       width: barWidth,
                       margin: EdgeInsets.only(
@@ -184,7 +169,7 @@ class _BarChartWidgetState extends State<BarChartWidget>
                 ),
               ),
             ),
-            
+
             // X轴标签
             _buildXAxisLabels(axisStyle, chartWidth, chartHeight, padding, barWidth),
           ],
@@ -211,8 +196,8 @@ class _BarChartWidgetState extends State<BarChartWidget>
     );
   }
 
-  Widget _buildYAxisLabels(AxisStyle axisStyle, double maxValue, double minValue, 
-      double valueRange, double chartHeight, double padding) {
+  Widget _buildYAxisLabels(
+      AxisStyle axisStyle, double maxValue, double minValue, double valueRange, double chartHeight, double padding) {
     return Positioned(
       left: 0,
       top: padding,
@@ -238,8 +223,7 @@ class _BarChartWidgetState extends State<BarChartWidget>
     );
   }
 
-  Widget _buildXAxisLabels(AxisStyle axisStyle, double chartWidth, double chartHeight, 
-      double padding, double barWidth) {
+  Widget _buildXAxisLabels(AxisStyle axisStyle, double chartWidth, double chartHeight, double padding, double barWidth) {
     return Positioned(
       left: padding,
       top: padding + chartHeight + 8,
@@ -249,12 +233,11 @@ class _BarChartWidgetState extends State<BarChartWidget>
           children: widget.data.data.asMap().entries.map((entry) {
             final index = entry.key;
             final dataPoint = entry.value;
-            
+
             return Container(
               width: barWidth,
               margin: EdgeInsets.only(
-                right: index < widget.data.data.length - 1 ? 
-                    (widget.barStyle?.spacing ?? 8.0) : 0,
+                right: index < widget.data.data.length - 1 ? (widget.barStyle?.spacing ?? 8.0) : 0,
               ),
               child: Text(
                 dataPoint.label,
@@ -272,17 +255,14 @@ class _BarChartWidgetState extends State<BarChartWidget>
     );
   }
 
-  Widget _buildBar(ChartDataPoint dataPoint, double barHeight, BarStyle barStyle, 
-      TooltipStyle tooltipStyle, double maxValue) {
-    final color = dataPoint.color != null 
-        ? Color(int.parse(dataPoint.color!.replaceFirst('#', '0xFF')))
-        : barStyle.color;
-    
+  Widget _buildBar(ChartDataPoint dataPoint, double barHeight, BarStyle barStyle, TooltipStyle tooltipStyle, double maxValue) {
+    final color = dataPoint.color != null ? Color(int.parse(dataPoint.color!.replaceFirst('#', '0xFF'))) : barStyle.color;
+
     return AnimatedBuilder(
       animation: _animation,
       builder: (context, child) {
         final animatedHeight = barHeight * _animation.value;
-        
+
         return GestureDetector(
           onTap: () {
             if (tooltipStyle.showTooltip) {
@@ -299,7 +279,8 @@ class _BarChartWidgetState extends State<BarChartWidget>
                       width: barStyle.borderWidth,
                     )
                   : null,
-              borderRadius: BorderRadius.circular(barStyle.borderRadius),
+              borderRadius:
+                  barStyle.borderRadius != null ? BorderRadius.circular(barStyle.borderRadius!) : barStyle.borderRadiusStyle,
             ),
           ),
         );
@@ -308,9 +289,8 @@ class _BarChartWidgetState extends State<BarChartWidget>
   }
 
   void _showTooltip(BuildContext context, ChartDataPoint dataPoint, TooltipStyle tooltipStyle) {
-    final tooltipText = dataPoint.tooltip ?? 
-        '${dataPoint.label}: ${_formatValue(dataPoint.value, widget.data.unit)}';
-    
+    final tooltipText = dataPoint.tooltip ?? '${dataPoint.label}: ${_formatValue(dataPoint.value, widget.data.unit)}';
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
