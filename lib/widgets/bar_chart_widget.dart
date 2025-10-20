@@ -172,9 +172,29 @@ class _BarChartWidgetState extends State<BarChartWidget> with TickerProviderStat
 
             // X轴标签
             _buildXAxisLabels(axisStyle, chartWidth, chartHeight, padding, barWidth),
+
+            // 坐标轴
+            if (axisStyle.showAxis) _buildAxisLines(axisStyle, chartWidth, chartHeight, padding),
           ],
         );
       },
+    );
+  }
+
+  Widget _buildAxisLines(AxisStyle axisStyle, double chartWidth, double chartHeight, double padding) {
+    return Positioned(
+      left: padding,
+      bottom: padding,
+      child: SizedBox(
+        width: chartWidth + 20,
+        height: chartHeight + 20,
+        child: CustomPaint(
+          painter: AxisLinesPainter(
+            color: axisStyle.color,
+            strokeWidth: axisStyle.gridWidth,
+          ),
+        ),
+      ),
     );
   }
 
@@ -357,6 +377,40 @@ class GridLinesPainter extends CustomPainter {
         paint,
       );
     }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+/// 用于绘制坐标轴的自定义画笔
+class AxisLinesPainter extends CustomPainter {
+  final Color color;
+  final double strokeWidth;
+
+  AxisLinesPainter({
+    required this.color,
+    required this.strokeWidth,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke;
+    final y = size.height;
+    canvas.drawLine(
+      Offset(0, y),
+      Offset(size.width, y),
+      paint,
+    );
+    final x = size.width * 0;
+    canvas.drawLine(
+      Offset(x, 0),
+      Offset(x, size.height),
+      paint,
+    );
   }
 
   @override

@@ -94,6 +94,9 @@ class AxisStyle {
   /// 是否显示网格线
   final bool showGrid;
 
+  /// 是否显示轴线
+  final bool showAxis;
+
   /// 要显示的x轴网格线数量
   final int gridCountX;
 
@@ -101,14 +104,15 @@ class AxisStyle {
   final int gridCountY;
 
   const AxisStyle({
-    this.color = Colors.grey,
+    this.color = Colors.black54,
     this.width = 1.0,
     this.labelColor = Colors.black87,
     this.labelFontSize = 12.0,
     this.labelFontWeight = FontWeight.normal,
     this.gridColor = Colors.grey,
     this.gridWidth = 0.5,
-    this.showGrid = true,
+    this.showGrid = false,
+    this.showAxis = true,
     this.gridCountX = 5,
     this.gridCountY = 8,
   });
