@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'remote_bar_chart.dart';
+import 'simple_chart_widget.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,14 +35,6 @@ class _ChartDemoPageState extends State<ChartDemoPage> {
     ChartExample(
       title: '示例数据',
       description: '本地示例数据，带自定义样式',
-    ),
-    ChartExample(
-      title: '远程数据 (JSONPlaceholder)',
-      description: '从JSONPlaceholder API获取数据',
-      remoteConfig: const RemoteConfig(
-        url: 'https://jsonplaceholder.typicode.com/posts',
-        timeoutSeconds: 10,
-      ),
     ),
     ChartExample(
       title: '自定义样式图表',
@@ -209,13 +201,11 @@ class _ChartDemoPageState extends State<ChartDemoPage> {
 class ChartExample {
   final String title;
   final String description;
-  final RemoteConfig? remoteConfig;
   final bool customStyle;
 
   ChartExample({
     required this.title,
     required this.description,
-    this.remoteConfig,
     this.customStyle = false,
   });
 }

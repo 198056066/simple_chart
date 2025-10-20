@@ -29,14 +29,14 @@ dependencies:
 
 ```dart
 import 'package:flutter/material.dart';
-import 'remote_bar_chart.dart';
+import 'simple_chart_widget.dart';
 
 class MyChartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('柱状图示例')),
-      body: RemoteBarChart(
+      body: SimpleBarChart(
         remoteConfig: RemoteConfig(
           url: 'https://api.example.com/chart-data',
           headers: {'Authorization': 'Bearer your-token'},
@@ -54,7 +54,7 @@ class MyChartPage extends StatelessWidget {
 
 ```dart
 import 'package:flutter/material.dart';
-import 'remote_bar_chart.dart';
+import 'simple_chart_widget.dart';
 
 class LocalChartPage extends StatelessWidget {
   @override
@@ -115,7 +115,7 @@ class LocalChartPage extends StatelessWidget {
 ### 图表样式
 
 ```dart
-RemoteBarChart(
+SimpleBarChart(
   remoteConfig: remoteConfig,
   chartStyle: ChartStyle(
     backgroundColor: Colors.white,
@@ -132,7 +132,7 @@ RemoteBarChart(
 ### 柱子样式
 
 ```dart
-RemoteBarChart(
+SimpleBarChart(
   remoteConfig: remoteConfig,
   barStyle: BarStyle(
     color: Colors.blue,
@@ -150,7 +150,7 @@ RemoteBarChart(
 ### 坐标轴样式
 
 ```dart
-RemoteBarChart(
+SimpleBarChart(
   remoteConfig: remoteConfig,
   axisStyle: AxisStyle(
     color: Colors.grey,
@@ -170,7 +170,7 @@ RemoteBarChart(
 ### 标题样式
 
 ```dart
-RemoteBarChart(
+SimpleBarChart(
   remoteConfig: remoteConfig,
   titleStyle: TitleStyle(
     color: Colors.black87,
@@ -186,7 +186,7 @@ RemoteBarChart(
 ### 提示框样式
 
 ```dart
-RemoteBarChart(
+SimpleBarChart(
   remoteConfig: remoteConfig,
   tooltipStyle: TooltipStyle(
     backgroundColor: Colors.black87,
@@ -200,30 +200,12 @@ RemoteBarChart(
 )
 ```
 
-## 远程配置
-
-### RemoteConfig 参数
-
-```dart
-RemoteConfig(
-  url: 'https://api.example.com/chart-data',  // 必需：数据API地址
-  headers: {                                  // 可选：HTTP请求头
-    'Authorization': 'Bearer token',
-    'Content-Type': 'application/json',
-  },
-  timeoutSeconds: 30,                         // 可选：请求超时时间（秒）
-  showLoading: true,                          // 可选：是否显示加载指示器
-  showError: true,                            // 可选：是否显示错误信息
-  customErrorMessage: '自定义错误消息',        // 可选：自定义错误消息
-)
-```
-
 ## 回调函数
 
 ### 数据加载成功回调
 
 ```dart
-RemoteBarChart(
+SimpleBarChart(
   remoteConfig: remoteConfig,
   onDataLoaded: (ChartData data) {
     print('数据加载成功: ${data.title}');
@@ -236,7 +218,7 @@ RemoteBarChart(
 ### 错误处理回调
 
 ```dart
-RemoteBarChart(
+SimpleBarChart(
   remoteConfig: remoteConfig,
   onError: (Exception error) {
     print('数据加载失败: $error');
@@ -251,7 +233,7 @@ RemoteBarChart(
 ### 自定义加载组件
 
 ```dart
-RemoteBarChart(
+SimpleBarChart(
   remoteConfig: remoteConfig,
   loadingWidget: Center(
     child: Column(
@@ -270,7 +252,7 @@ RemoteBarChart(
 ### 自定义错误组件
 
 ```dart
-RemoteBarChart(
+SimpleBarChart(
   remoteConfig: remoteConfig,
   errorWidget: Center(
     child: Column(
@@ -308,7 +290,7 @@ flutter run
 
 ## API 参考
 
-### RemoteBarChart
+### SimpleBarChart
 
 主要的远程柱状图组件。
 
@@ -316,7 +298,6 @@ flutter run
 
 | 参数 | 类型 | 必需 | 描述 |
 |------|------|------|------|
-| `remoteConfig` | `RemoteConfig` | 是 | 远程数据获取配置 |
 | `chartStyle` | `ChartStyle?` | 否 | 图表样式配置 |
 | `barStyle` | `BarStyle?` | 否 | 柱子样式配置 |
 | `axisStyle` | `AxisStyle?` | 否 | 坐标轴样式配置 |
@@ -350,9 +331,6 @@ flutter run
 数据服务类，提供数据获取和验证功能。
 
 #### 静态方法
-
-- `fetchChartData(RemoteConfig config)`: 从远程URL获取图表数据
-- `fetchChartDataWithRetry(RemoteConfig config, {int maxRetries, Duration retryDelay})`: 带重试逻辑的数据获取
 - `validateChartData(ChartData data)`: 验证图表数据结构
 - `createSampleData()`: 创建示例数据
 

@@ -5,10 +5,7 @@ import '../services/data_service.dart';
 import 'bar_chart_widget.dart';
 
 /// 显示从远程源获取数据的柱状图的小部件
-class RemoteBarChart extends StatefulWidget {
-  /// 远程数据获取的配置
-  final RemoteConfig remoteConfig;
-  
+class SimpleBarChart extends StatefulWidget {
   /// 图表的样式配置
   final ChartStyle? chartStyle;
   
@@ -45,9 +42,8 @@ class RemoteBarChart extends StatefulWidget {
   /// 自定义错误小部件
   final Widget? errorWidget;
 
-  const RemoteBarChart({
+  const SimpleBarChart({
     super.key,
-    required this.remoteConfig,
     this.chartStyle,
     this.barStyle,
     this.axisStyle,
@@ -63,10 +59,10 @@ class RemoteBarChart extends StatefulWidget {
   });
 
   @override
-  State<RemoteBarChart> createState() => _RemoteBarChartState();
+  State<SimpleBarChart> createState() => _SimpleBarChartState();
 }
 
-class _RemoteBarChartState extends State<RemoteBarChart> {
+class _SimpleBarChartState extends State<SimpleBarChart> {
   ChartData? _chartData;
   bool _isLoading = false;
   Exception? _error;
@@ -79,11 +75,9 @@ class _RemoteBarChartState extends State<RemoteBarChart> {
   }
 
   @override
-  void didUpdateWidget(RemoteBarChart oldWidget) {
+  void didUpdateWidget(SimpleBarChart oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.remoteConfig.url != widget.remoteConfig.url) {
       _loadData();
-    }
   }
 
   Future<void> _loadData() async {
@@ -93,31 +87,11 @@ class _RemoteBarChartState extends State<RemoteBarChart> {
       _isLoading = true;
       _error = null;
     });
-
-    try {
-      final data = await DataService.fetchChartDataWithRetry(widget.remoteConfig);
-      
       if (!mounted) return;
-      
       setState(() {
-        _chartData = data;
         _isLoading = false;
         _hasInitialLoad = true;
       });
-      
-      widget.onDataLoaded?.call(data);
-    } catch (e) {
-      if (!mounted) return;
-      
-      final exception = e is Exception ? e : Exception(e.toString());
-      setState(() {
-        _error = exception;
-        _isLoading = false;
-        _hasInitialLoad = true;
-      });
-      
-      widget.onError?.call(exception);
-    }
   }
 
   void _retry() {
@@ -181,9 +155,6 @@ class _RemoteBarChartState extends State<RemoteBarChart> {
       return widget.errorWidget!;
     }
     
-    final errorMessage = widget.remoteConfig.customErrorMessage ?? 
-        '加载图表数据失败: ${_error?.toString() ?? '未知错误'}';
-    
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -194,14 +165,6 @@ class _RemoteBarChartState extends State<RemoteBarChart> {
               Icons.error_outline,
               size: 48,
               color: Colors.red[300],
-            ),
-            const SizedBox(height: 16),
-            Text(
-              errorMessage,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.red[700],
-              ),
-              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
             ElevatedButton.icon(
