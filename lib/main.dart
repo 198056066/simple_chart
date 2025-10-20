@@ -91,24 +91,12 @@ class _ChartDemoPageState extends State<ChartDemoPage> {
                             color: isSelected ? Colors.white : Colors.black87,
                           ),
                         ),
-                        const SizedBox(height: 4),
                         Text(
                           example.description,
                           style: TextStyle(
                             fontSize: 12,
                             color: isSelected ? Colors.white70 : Colors.black54,
                           ),
-                        ),
-                        const Spacer(),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.storage,
-                              size: 16,
-                              color: isSelected ? Colors.white : Colors.black54,
-                            ),
-                            const SizedBox(width: 4),
-                          ],
                         ),
                       ],
                     ),

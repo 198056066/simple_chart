@@ -25,8 +25,8 @@ class ChartStyle {
     this.borderColor = Colors.grey,
     this.borderWidth = 1.0,
     this.borderRadius = 8.0,
-    this.padding = const EdgeInsets.all(16.0),
-    this.margin = const EdgeInsets.all(8.0),
+    this.padding = const EdgeInsets.all(0.0),
+    this.margin = const EdgeInsets.all(10.0),
   });
 }
 
@@ -79,6 +79,9 @@ class AxisStyle {
   /// 坐标轴线条的宽度
   final double width;
 
+  /// y坐标轴标签的宽度
+  final double yAxisWidth;
+
   /// 坐标轴标签的颜色
   final Color labelColor;
 
@@ -110,6 +113,7 @@ class AxisStyle {
     this.color = Colors.black54,
     this.overWidth = 20.0,
     this.width = 1.0,
+    this.yAxisWidth = 50.0,
     this.labelColor = Colors.black87,
     this.labelFontSize = 12.0,
     this.labelFontWeight = FontWeight.normal,

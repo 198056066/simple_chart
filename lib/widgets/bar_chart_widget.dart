@@ -138,7 +138,7 @@ class _BarChartWidgetState extends State<BarChartWidget> with TickerProviderStat
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        chartWidth = constraints.maxWidth - padding * 2;
+        chartWidth = constraints.maxWidth - padding * 2 - axisStyle.yAxisWidth;
         chartHeight = constraints.maxHeight - padding * 2;
         final barWidth = (chartWidth - (widget.data.data.length - 1) * barStyle.spacing) / widget.data.data.length;
 
@@ -155,7 +155,7 @@ class _BarChartWidgetState extends State<BarChartWidget> with TickerProviderStat
 
             // 柱子
             Positioned(
-              left: padding,
+              left: axisStyle.yAxisWidth,
               top: padding,
               child: SizedBox(
                 width: chartWidth,
@@ -177,38 +177,6 @@ class _BarChartWidgetState extends State<BarChartWidget> with TickerProviderStat
                         barHeight,
                         maxValue,
                         barWidth,
-                        chartHeight,
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ),
-
-            Positioned(
-              left: padding,
-              top: padding,
-              child: SizedBox(
-                width: chartWidth,
-                height: chartHeight,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: widget.data.data.asMap().entries.map((entry) {
-                    final index = entry.key;
-                    final dataPoint = entry.value;
-                    final barHeight = valueRange > 0 ? (dataPoint.value - minValue) / valueRange * chartHeight : 0.0;
-
-                    return Container(
-                      width: barWidth,
-                      margin: EdgeInsets.only(
-                        right: index < widget.data.data.length - 1 ? barStyle.spacing : 0,
-                      ),
-                      child: _buildBar(
-                        dataPoint,
-                        barHeight,
-                        maxValue,
-                        barWidth,
-                        chartHeight,
                       ),
                     );
                   }).toList(),
@@ -217,27 +185,29 @@ class _BarChartWidgetState extends State<BarChartWidget> with TickerProviderStat
             ),
 
             // X轴标签
-            _buildXAxisLabels(chartWidth, chartHeight, padding, barWidth),
+            _buildXAxisLabels(barWidth),
 
             // 坐标轴
-            if (axisStyle.showAxis) _buildAxisLines(axisStyle, chartWidth, chartHeight, padding),
+            if (axisStyle.showAxis) _buildAxisLines(),
           ],
         );
       },
     );
   }
 
-  Widget _buildAxisLines(AxisStyle axisStyle, double chartWidth, double chartHeight, double padding) {
+  Widget _buildAxisLines() {
     return Positioned(
-      left: padding,
+      left: axisStyle.yAxisWidth,
       bottom: padding,
-      child: SizedBox(
-        width: chartWidth + axisStyle.overWidth,
-        height: chartHeight + axisStyle.overWidth,
-        child: CustomPaint(
-          painter: AxisLinesPainter(
-            color: axisStyle.color,
-            strokeWidth: axisStyle.gridWidth,
+      child: IgnorePointer(
+        child: SizedBox(
+          width: chartWidth + axisStyle.overWidth,
+          height: chartHeight + axisStyle.overWidth,
+          child: CustomPaint(
+            painter: AxisLinesPainter(
+              color: axisStyle.color,
+              strokeWidth: axisStyle.gridWidth,
+            ),
           ),
         ),
       ),
@@ -246,17 +216,19 @@ class _BarChartWidgetState extends State<BarChartWidget> with TickerProviderStat
 
   Widget _buildGridLines() {
     return Positioned(
-      left: padding,
+      left: axisStyle.yAxisWidth,
       top: padding,
-      child: SizedBox(
-        width: chartWidth,
-        height: chartHeight,
-        child: CustomPaint(
-          painter: GridLinesPainter(
-            color: axisStyle.gridColor,
-            strokeWidth: axisStyle.gridWidth,
-            gridCountX: axisStyle.gridCountX,
-            gridCountY: axisStyle.gridCountY,
+      child: IgnorePointer(
+        child: SizedBox(
+          width: chartWidth,
+          height: chartHeight,
+          child: CustomPaint(
+            painter: GridLinesPainter(
+              color: axisStyle.gridColor,
+              strokeWidth: axisStyle.gridWidth,
+              gridCountX: axisStyle.gridCountX,
+              gridCountY: axisStyle.gridCountY,
+            ),
           ),
         ),
       ),
@@ -268,7 +240,7 @@ class _BarChartWidgetState extends State<BarChartWidget> with TickerProviderStat
       left: 0,
       top: padding,
       child: SizedBox(
-        width: padding,
+        width: axisStyle.yAxisWidth,
         height: chartHeight,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -291,18 +263,17 @@ class _BarChartWidgetState extends State<BarChartWidget> with TickerProviderStat
 
   Widget _buildYAxisScales(double maxValue, double minValue, double valueRange) {
     return Positioned(
-      left: padding - 8,
+      left: axisStyle.yAxisWidth - 1,
       top: padding,
       child: SizedBox(
-        width: padding,
         height: chartHeight,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: List.generate(axisStyle.gridCountX + 1, (index) {
-            return Container(
-              height: 1,
-              width: 5,
-              color: Colors.grey,
+            return Text(
+              '-',
+              style: TextStyle(color: axisStyle.color),
+              textAlign: TextAlign.center,
             );
           }),
         ),
@@ -310,39 +281,41 @@ class _BarChartWidgetState extends State<BarChartWidget> with TickerProviderStat
     );
   }
 
-  Widget _buildXAxisLabels(double chartWidth, double chartHeight, double padding, double barWidth) {
+  Widget _buildXAxisLabels(double barWidth) {
     return Positioned(
-      left: padding,
-      top: padding + chartHeight + 8,
-      child: SizedBox(
-        width: chartWidth,
-        child: Row(
-          children: widget.data.data.asMap().entries.map((entry) {
-            final index = entry.key;
-            final dataPoint = entry.value;
+      left: axisStyle.yAxisWidth,
+      top: padding + chartHeight + 5,
+      child: IgnorePointer(
+        child: SizedBox(
+          width: chartWidth,
+          child: Row(
+            children: widget.data.data.asMap().entries.map((entry) {
+              final index = entry.key;
+              final dataPoint = entry.value;
 
-            return Container(
-              width: barWidth,
-              margin: EdgeInsets.only(
-                right: index < widget.data.data.length - 1 ? (widget.barStyle?.spacing ?? 8.0) : 0,
-              ),
-              child: Text(
-                dataPoint.label,
-                style: TextStyle(
-                  color: axisStyle.labelColor,
-                  fontSize: axisStyle.labelFontSize,
-                  fontWeight: axisStyle.labelFontWeight,
+              return Container(
+                width: barWidth,
+                margin: EdgeInsets.only(
+                  right: index < widget.data.data.length - 1 ? (widget.barStyle?.spacing ?? 8.0) : 0,
                 ),
-                textAlign: TextAlign.center,
-              ),
-            );
-          }).toList(),
+                child: Text(
+                  dataPoint.label,
+                  style: TextStyle(
+                    color: axisStyle.labelColor,
+                    fontSize: axisStyle.labelFontSize,
+                    fontWeight: axisStyle.labelFontWeight,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              );
+            }).toList(),
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildBar(ChartDataPoint dataPoint, double barHeight, double maxValue, double barWidth, double chartHeight) {
+  Widget _buildBar(ChartDataPoint dataPoint, double barHeight, double maxValue, double barWidth) {
     final color = dataPoint.color != null ? Color(int.parse(dataPoint.color!.replaceFirst('#', '0xFF'))) : barStyle.color;
 
     return AnimatedBuilder(
@@ -350,20 +323,19 @@ class _BarChartWidgetState extends State<BarChartWidget> with TickerProviderStat
       builder: (context, child) {
         final animatedHeight = barHeight * _animation.value;
 
-        return GestureDetector(
-          onTap: () {
-            if (tooltipStyle.showTooltip) {
-              _showTooltip(context, dataPoint);
-            }
-          },
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              if (dataPoint.remarks!.map((e) => e.toString()).toString().replaceAll(RegExp(r'^/[|/]$'), '').length * 5 <=
-                  chartHeight - animatedHeight)
-                Container(
-                    alignment: Alignment.bottomCenter, height: chartHeight - animatedHeight, child: _buildRemarks(dataPoint)),
-              Stack(
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            if (dataPoint.remarks!.map((e) => e.toString()).toString().replaceAll(RegExp(r'^/[|/]$'), '').length * 5 <=
+                chartHeight - animatedHeight)
+              Container(alignment: Alignment.bottomCenter, height: chartHeight - animatedHeight, child: _buildRemarks(dataPoint)),
+            GestureDetector(
+              onTap: () {
+                if (tooltipStyle.showTooltip) {
+                  _showTooltip(context, dataPoint);
+                }
+              },
+              child: Stack(
                 children: [
                   Container(
                     width: barWidth,
@@ -384,12 +356,12 @@ class _BarChartWidgetState extends State<BarChartWidget> with TickerProviderStat
                   if (dataPoint.remarks!.map((e) => e.toString()).toString().replaceAll(RegExp(r'^/[|/]$'), '').length * 5 >
                       chartHeight - animatedHeight)
                     Positioned(
-                      child: Container(alignment: Alignment.center, child: _buildRemarks(dataPoint)),
+                      child: IgnorePointer(child: Container(alignment: Alignment.center, child: _buildRemarks(dataPoint))),
                     )
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
